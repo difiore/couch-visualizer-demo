@@ -1,26 +1,38 @@
 <html>
   <head>
-     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js">
-     </script>
-    <script type="text/javascript" src="couch.js"></script>
-    <link rel="stylesheet" href="couch.css" charset="utf-8">
     <title></title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="couch.js"></script>
+    <!--<link rel="stylesheet" href="couch.css" charset="utf-8">-->
+
+    <script src="leaflet-0.7.3/leaflet.js"></script>
+    <link rel="stylesheet" href="leaflet-0.7.3/leaflet.css"/>
+
   </head>
   <body>
-    New Field: <input type="text" id="username"><br>
-    Date: <input type="text" id="date" size="40"><br>
-    _id: <input type="text" id="uuid" size="40"><br>
-    Revision: <input type="text" id="rev" size="40"><br>
+    Timestamp: <input type="text" id="date" size="40" readonly><br>
+    Observer: <input type="text" id="activityBy"><br>
+    Record Date: <input type="text" id="eventDate"><br>
+    _id: <input type="text" id="_id" size="40"><br>
+    _rev: <input type="text" id="_rev" size="40" readonly><br>
+    <div id="newButton">
+      <button type="button" id="newID" name="newID">NEW ID</button>
+    </div>
+    <div id="plotButton">
+      <button type="button" id="plot" name="plot">PLOT</button>
+    </div>
     <div id="buttonDiv">
       <button type="button" name="getButton">GET</button>
       <button type="button" name="putButton">PUT</button>
       <button type="button" name="postButton">POST</button>
       <button type="button" name="button">DELETE</button>
-    </div>
-
-
+    </div>      
+    <!--<div>Footprint:<textarea id="footprint"></textarea></div>-->
+    <div>Footprint:<input type="text" id="footprint" size="40" readonly></div>
+    <div id="map", style="width: 800px; height: 600px" ></div>
     <script type="text/javascript">
       setup();
     </script>
+    <script src="leaflet-script.js" type="text/javascript"></script>
   </body>
 </html>

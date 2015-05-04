@@ -1,7 +1,7 @@
 var record = {};
 
 function setup() {
-  // set a clock to update the Date/Time field every second:
+  // set a clock to update the Timestamp field every second:
   setInterval(clock, 1000);
 
   // set event listeners for the buttons.
@@ -10,13 +10,14 @@ function setup() {
   // then get all the buttons in a list:
   var buttons = buttonDiv.getElementsByTagName('*');
   // the iterate over the list and add event listeners:
-  for (var b=0; b< buttons.length; b++) {
+  for (var b=0; b < buttons.length ; b++) {
     buttons[b].addEventListener('click', contactServer, false);
-  }
-
-  //  generate a record ID:
-  document.getElementById('uuid').value = generateUuid();
-}
+  };
+  var newID = document.getElementsByName('newID');
+  newID[0].addEventListener('click', function(){document.getElementById('_id').value = generateUuid()}, false);
+  var plot = document.getElementsByName('plot');
+  plot[0].addEventListener('click', function(){plotFootprint()}, false);    
+};
 
 // this function updates the date/time field  once a second:
 function clock() {
@@ -25,15 +26,9 @@ function clock() {
 }
 
 function generateUuid() {
-  var username = document.getElementById('username').value;
-  var uuid = new Date().valueOf();
-
-  for (var c=0; c< username.length; c++) {
-    uuid += (username.charCodeAt(c));
-  }
-   uuid = uuid * (Math.PI * Math.random(1000000));
-   uuid = Math.floor(uuid);
-   return uuid;
+  var _id = 100000 * Math.random();
+  _id = "temporary-"+ Math.floor(_id);
+  return _id;
 }
 
 // this function contacts the server:
@@ -41,14 +36,10 @@ function contactServer() {
   // get the method from the button clicked:
   var method = event.target.innerHTML;
 
-  // get the record _id and name from the UI field:
-  var id = document.getElementById('uuid').value;
-  var rev = document.getElementById('rev').value;
-  var username = document.getElementById('username').value;
+  // get the record _id from the _id field:
+  var id = document.getElementById('_id').value;
 
   if (id) record._id = id;
-  if (rev) record._rev = rev;
-  if (username) record.name = username;
 
   // set up the basic HTTP parameters:
   var params = {
@@ -75,13 +66,24 @@ function contactServer() {
   // (ID optional in the body):
   if (method === 'PUT') {
     params.url += record._id;
+    record.activityBy = document.getElementById('activityBy').value;
+    record.eventDate = document.getElementById('eventDate').value;
+    data = JSON.stringify(record);
     params.data = data;
+    // clear the fields
+    document.getElementById('activityBy').value ="";
+    document.getElementById('eventDate').value ="";
+    document.getElementById('_rev').value ="";
   }
 
   // DELETE wants /document/recordID?recordRev and no request body:
   if (method === 'DELETE') {
     params.url += record._id;
     params.url += "?rev=" + record._rev;
+    document.getElementById('activityBy').value ="";
+    document.getElementById('eventDate').value ="";
+    document.getElementById('_rev').value ="";
+    document.getElementById('footprint').value ="";
   }
 
   // make the HTTP call:
@@ -93,17 +95,17 @@ function contactServer() {
 function callback(data) {
   // save the response as the local record:
   record = data;
-  // if there's a name, put it in the name field;
-  if (record.name) {
-    document.getElementById('username').value = record.name;
+  if (record._id){
+    document.getElementById('activityBy').value = record.activityBy;
+    document.getElementById('eventDate').value = record.eventDate;
+    document.getElementById('_rev').value = record._rev;
+    document.getElementById('footprint').value = JSON.stringify(record.footprint);
   }
-  // if there's rev or a _rev, put it in the rev field:
-  if (record.rev) {
-    document.getElementById('rev').value = record.rev;
-  }
-  if (record._rev) {
-    document.getElementById('rev').value = record._rev;
-  }
-
   console.dir(record);
+}
+
+function plotFootprint() {
+  var geojsonFeature = JSON.stringify(record.footprint);
+  geojsonFeature = geojsonFeature.slice(1,geojsonFeature.length - 1);
+  L.geoJson(geojsonFeature).addTo(map);
 }
