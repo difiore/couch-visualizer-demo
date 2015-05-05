@@ -491,7 +491,8 @@ input {
 
 textarea {
 	  position: absolute;
-	  left: 120px;
-	  width: 250px;
-	  height: 40px;
+	  left: 407px;
+      top: 8px;
+	  width: 400px;
+	  height: 178px;
 	}

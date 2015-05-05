@@ -63,17 +63,18 @@ function contactServer() {
   }
 
   // PUT wants /document/recordID and a request body with just the data
-  // (ID optional in the body):
   if (method === 'PUT') {
     params.url += record._id;
     record.activityBy = document.getElementById('activityBy').value;
     record.eventDate = document.getElementById('eventDate').value;
+    //record.footprint = document.getElementById('footprint').value;
     data = JSON.stringify(record);
     params.data = data;
     // clear the fields
     document.getElementById('activityBy').value ="";
     document.getElementById('eventDate').value ="";
     document.getElementById('_rev').value ="";
+    //document.getElementById('footprint').value ="";
   }
 
   // DELETE wants /document/recordID?recordRev and no request body:
@@ -91,7 +92,6 @@ function contactServer() {
   console.dir(data);
 }
 
-// this function gets the request response:
 function callback(data) {
   // save the response as the local record:
   record = data;
@@ -99,13 +99,15 @@ function callback(data) {
     document.getElementById('activityBy').value = record.activityBy;
     document.getElementById('eventDate').value = record.eventDate;
     document.getElementById('_rev').value = record._rev;
-    document.getElementById('footprint').value = JSON.stringify(record.footprint);
+    document.getElementById('footprint').value = record.footprint;
+    //document.getElementById('footprint').value = JSON.stringify(footprint);
   }
   console.dir(record);
 }
 
 function plotFootprint() {
-  var geojsonFeature = JSON.stringify(record.footprint);
-  geojsonFeature = geojsonFeature.slice(1,geojsonFeature.length - 1);
-  L.geoJson(geojsonFeature).addTo(map);
+  //var geojsonFeature = JSON.parse(document.getElementById('footprint').value);
+ // geojsonFeature = geojsonFeature.slice(1,geojsonFeature.length - 1);
+  // L.geoJson(geojsonFeature).addTo(map);
+  L.geoJson(record.footprint[0]).addTo(map); 
 }

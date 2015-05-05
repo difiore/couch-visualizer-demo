@@ -15,6 +15,7 @@
     Record Date: <input type="text" id="eventDate"><br>
     _id: <input type="text" id="_id" size="40"><br>
     _rev: <input type="text" id="_rev" size="40" readonly><br>
+    
     <div id="newButton">
       <button type="button" id="newID" name="newID">NEW ID</button>
     </div>
@@ -26,9 +27,8 @@
       <button type="button" name="putButton">PUT</button>
       <button type="button" name="postButton">POST</button>
       <button type="button" name="button">DELETE</button>
-    </div>      
-    <!--<div>Footprint:<textarea id="footprint"></textarea></div>-->
-    <div>Footprint:<input type="text" id="footprint" size="40" readonly></div>
+    </div>
+    <textarea id="footprint"></textarea>
     <div id="map", style="width: 800px; height: 600px" ></div>
     <script type="text/javascript">
       setup();
